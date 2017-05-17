@@ -20,3 +20,9 @@ from 0 to 255 with dtype np.uint8.
 5. The result of pre batch normalization is better than the result of post
 batch normalization. You can compare results in pre-batch or post-batch
 folder.
+
+
+Usage:
+1. create folder and name it images;
+2. git clone https://github.com/junming259/DCGANs.git
+3. run main.py
