@@ -117,7 +117,9 @@ def dense(inputs, d_outputs, name):
 
 
 def leak_relu(inputs, alpha=0.02):
-    # return tf.maximum(inputs, alpha*inputs)
+    '''
+    leak relu activation function
+    '''
     f1 = 0.5 * (1 + alpha)
     f2 = 0.5 * (1 - alpha)
 
@@ -176,7 +178,8 @@ def conv2d_transpose(inputs, kernel_shape, output_shape, with_bn=False, is_train
         biases = tf.get_variable('biases', shape=[kernel_shape[-2]],
                                     initializer=tf.constant_initializer(0.0))
 
-        outs = tf.nn.conv2d_transpose(inputs, weights, output_shape, strides=[1,2,2,1], padding='SAME')
+        outs = tf.nn.conv2d_transpose(inputs, weights, output_shape,
+                                        strides=[1,2,2,1], padding='SAME')
         outs = outs + biases
 
         # post batch normalization
@@ -190,23 +193,27 @@ def generator(inputs, is_train):
     '''
     define structure of generator
     '''
+
     with tf.variable_scope('generator') as scope:
 
         rep = dense(inputs, 4*4*256, 'g_projection')
         rep = tf.reshape(rep, [-1,4,4,256])
 
         deconv1 = conv2d_transpose(rep, [5,5,128,256], [batch_size,8,8,128],
-                                    with_bn=True, is_train=is_train, name='g_deconv1')
+                                    with_bn=True, is_train=is_train,
+                                    name='g_deconv1')
         deconv1 = tf.nn.relu(deconv1)
 
 
         deconv2 = conv2d_transpose(deconv1, [5,5,64,128], [batch_size,16,16,64],
-                                    with_bn=True, is_train=is_train, name='g_deconv2')
+                                    with_bn=True, is_train=is_train,
+                                    name='g_deconv2')
         deconv2 = tf.nn.relu(deconv2)
 
 
         deconv3 = conv2d_transpose(deconv2, [5,5,3,64], [batch_size,32,32,3],
-                                    with_bn=True, is_train=is_train, name='g_deconv3')
+                                    with_bn=True, is_train=is_train,
+                                    name='g_deconv3')
         deconv3 = tf.nn.relu(deconv3)
 
 
